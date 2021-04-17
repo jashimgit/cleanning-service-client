@@ -15,7 +15,7 @@ const serviceItems = [
   {
     name: "House Cleaning",
     image: house,
-  },
+  }
 ];
 
 const Services = () => {

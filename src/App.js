@@ -4,6 +4,7 @@ import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import { ProvideAuth } from "./pages/Auth/UseAuth";
 import AddAdmin from "./pages/Dashboard/AddAdmin";
+import AddReview from "./pages/Dashboard/AddReview";
 import AddService from "./pages/Dashboard/AddService";
 import Checkout from "./pages/Dashboard/Checkout";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -36,6 +37,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login></Login>
+          </Route>
+          <Route path="/dashboard/add-review">
+            <AddReview></AddReview>
           </Route>
           <PrivateRoute path="/order-service/:id">
             <Checkout />

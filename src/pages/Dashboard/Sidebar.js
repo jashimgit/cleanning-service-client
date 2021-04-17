@@ -57,6 +57,15 @@ const Sidebar = () => {
         </li>
         <li className="nav-item">
           <Link
+            to="/dashboard/add-review"
+            className="nav-link menuLink"
+            aria-current="page"
+          >
+            <FontAwesomeIcon icon={faUserFriends} /> Review Service
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link
             to="/dashboard/manage-service"
             className="nav-link menuLink"
             aria-current="page"

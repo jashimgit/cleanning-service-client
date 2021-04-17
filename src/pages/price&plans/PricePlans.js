@@ -9,7 +9,7 @@ const PricePlans = () => {
   const history = useHistory();
   
   const handlePurchase = (id) => {
-    console.log(id)
+    // console.log(id)
     history.push('/order-service/'+id);
   }
 

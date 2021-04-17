@@ -1,29 +1,34 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../Auth/UseAuth";
 import Sidebar from "./Sidebar";
 
-const AddAdmin = () => {
+const AddReview = () => {
+  const [review, setReview] = useState('');
+  const auth = useAuth();
+  const userEmail = auth.user.email;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data, e) => {
-    // console.log(data);
-    e.preventDefault();
-    fetch("http://localhost:5000/createAdmin", {
+  const onSubmit = (data) => {
+        
+    fetch("http://localhost:5000/add-review", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+       userEmail : userEmail,
+       reviewMsg : data.review
+      }),
     })
       .then((res) => res.json())
       .then((success) => {
-        if (success) {
-          alert("Admin Added successfully");
-          e.target.value = "";
-        }
+        if(success) {alert('Review submited successfully')}
       });
     
   };
@@ -35,17 +40,17 @@ const AddAdmin = () => {
           <Sidebar></Sidebar>
         </div>
         <div className="col-md-8">
-          <h2 className="my-5">add admin</h2>
+          <h2 className="my-5">Review</h2>
           <div className="row">
             <div className="col-md-7">
             <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
-              <label>Email</label>
+              <label>Review</label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter Email ID"
-                {...register("email", { required: true })}
+                placeholder="Enter your review"
+                {...register("review", { required: true })}
               />
               {errors.name && (
                 <span className="text-danger">This field is required</span>
@@ -56,7 +61,7 @@ const AddAdmin = () => {
           
 
             <button type="submit" className="btn btn-primary">
-              Send
+                Submit Review
             </button>
           </form>
             </div>
@@ -67,4 +72,4 @@ const AddAdmin = () => {
   );
 };
 
-export default AddAdmin;
+export default AddReview;
