@@ -3,11 +3,14 @@ import SingleReview from "./SingleReview";
 
 const Review = () => {
   const [reviews, setReviews] = useState([]);
-
+    // console.log(reviews);
   useEffect(() => {
-    fetch("http://localhost:5000/reviews")
-      .then((res) => res.json())
-      .then((data) => setReviews(data));
+    async function fetchReview() {
+        const response = await fetch('http://localhost:5000/reviews')
+        const data = await response.json();
+        setReviews(data);
+    }
+    fetchReview();
   }, []);
 
   return (
@@ -17,14 +20,12 @@ const Review = () => {
           <h5 className="text-secondary">We are Happy</h5>
           <h1>What People Says</h1>
         </div>
-        <div className="row">
+      </div>
+      <div className="row">
           {
-          reviews.map((review) => (
-            <SingleReview review={review} key={review._id}></SingleReview>
-          ))
+              reviews.map(review => <SingleReview review = {review} key={review._id } />)
           }
         </div>
-      </div>
     </div>
   );
 };

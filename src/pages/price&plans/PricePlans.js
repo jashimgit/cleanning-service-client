@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import SingleService from "./SingleService";
 
@@ -14,9 +14,15 @@ const PricePlans = () => {
   }
 
 useEffect(() => {
-  fetch('http://localhost:5000/service')
-  .then(res => res.json())
-  .then(service => setServiceList(service));
+    async function fetchService() {
+    const res = await fetch('http://localhost:5000/service')
+    const json = await res.json();
+    setServiceList(json);
+  }
+
+  fetchService();
+
+
 }, [])
 
   return (
