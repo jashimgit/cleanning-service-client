@@ -27,8 +27,8 @@ const Features = () => {
             </div>
             <div className="row">
                 <div className=" col-12 header my-4 text-center">
-                    <h5>Enjoy your time off</h5>
-                    <h1>how we work</h1>
+                    <h5 className="text-secondary">Enjoy your time off</h5>
+                    <h1>How We Work</h1>
                 </div>
             </div>
             <div className="row">
