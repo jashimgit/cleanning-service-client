@@ -4,9 +4,13 @@ import Sidebar from "./Sidebar";
 
 const AddService = () => {
   const [imageUrl, setImageUrl] = useState();
-  const {register,handleSubmit, formState: { errors }} = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-// console.log(imageUrl);
+  // console.log(imageUrl);
 
   const onSubmit = (data) => {
     // console.log(data);
@@ -14,9 +18,10 @@ const AddService = () => {
       serviceName: data.servicePlan,
       price: data.price,
       status: data.status,
-      imageUrl : imageUrl
-    }
-  console.log(serviceInfo);
+      imageUrl: imageUrl,
+      details: data.details
+    };
+    console.log(serviceInfo);
 
     fetch("http://localhost:5000/addService", {
       method: "POST",
@@ -39,8 +44,6 @@ const AddService = () => {
       .then((res) => res.json())
       .then((data) => setImageUrl(data.data.display_url));
   };
-
-
 
   return (
     <div className="container-fluid p-0">
@@ -71,7 +74,7 @@ const AddService = () => {
                     type="text"
                     className="form-control"
                     placeholder="Price"
-                    {...register("price", { required: true })}   
+                    {...register("price", { required: true })}
                   />
                   {errors.name && (
                     <span className="text-danger">This field is required</span>
@@ -86,14 +89,21 @@ const AddService = () => {
                   </select>
                 </div>
                 <div className="form-group">
-                    <input
-                      type="file"
-                      name="file"
-                      className="form-control-file"
-                      {...register("image")}   
-                      onChange={handleImageUpload}
-                    />
-                  </div>
+                  <input
+                    type="file"
+                    name="file"
+                    className="form-control-file"
+                    {...register("image")}
+                    onChange={handleImageUpload}
+                  />
+                </div>
+                <div className="form-group">
+                  <textarea
+                    name="details"
+                    className="form-control"
+                    {...register("details")}
+                  ></textarea>
+                </div>
 
                 <button type="submit" className="btn btn-primary">
                   Send
