@@ -1,5 +1,5 @@
 .header-section {
-  background-image: url('./assets/images/03-home-2-1.jpg');
+  background-image: url("./assets/images/03-home-2-1.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
@@ -16,8 +16,8 @@
 }
 
 .header-description h1 {
-  color: #293F5B;
+  color: #293f5b;
 }
 .header h1 {
-  color: #5D95DB;
+  color: #5d95db;
 }
