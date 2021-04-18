@@ -1,21 +1,24 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../Auth/UseAuth";
+import { AuthContext } from "../../App";
 import Sidebar from "./Sidebar";
 
+
+
 const OrderList = () => {
+  const [loggedInUser, SetLoggedInUser] = useContext(AuthContext)
   const [orderList, setOrderList] = useState([]);
   // const [orderStatus, setOrderStatus] = useState({});
-  const auth = useAuth;
+  
   const { register } = useForm();
 
   const handleChange = (_id) => {
     const status = event.target.value;
     const id = _id;
-    fetch('http://localhost:5000/change-status', {
+    fetch('https://warm-spire-50135.herokuapp.com/change-status', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -26,7 +29,7 @@ const OrderList = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/orders")
+    fetch("https://warm-spire-50135.herokuapp.com/orders")
       .then((res) => res.json())
       .then((data) => setOrderList(data));
   }, []);
@@ -64,10 +67,10 @@ const OrderList = () => {
             <div className="col-md-12">
               <div className="d-flex justify-content-between py-2">
                 <h3 className="text-primary">Order list</h3>
-                {auth.user ? (
+                {loggedInUser.email ? (
                   <>
-                  <h3 className="text-primary">{auth.user.displayName}</h3>
-                  <button onClick={() => auth.signout()}>Sign Out</button>
+                  <h3 className="text-primary">{loggedInUser.displayName}</h3>
+                  <button className="btn btn-danger btn-sm" onClick={() => loggedInUser.signout()}>Sign Out</button>
                   </>
                 ) : (
                   <h3 className="text-primary">User Name</h3>

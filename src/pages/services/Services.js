@@ -1,29 +1,14 @@
 import React, { useEffect, useState } from "react";
-// import house from "../../assets/images/house-clean.jpg";
-// import office from "../../assets/images/office-clean.jpg";
-// import window from "../../assets/images/window-clean.jpg";
+ 
 import ServiceItem from "./ServiceItem";
-// const serviceItems = [
-//   {
-//     name: "Window Cleaning",
-//     image: window,
-//   },
-//   {
-//     name: "Office Cleaning",
-//     image: office,
-//   },
-//   {
-//     name: "House Cleaning",
-//     image: house,
-//   }
-// ];
+ 
 
 const Services = () => {
   const [serviceList, setServiceList] = useState([]);
   console.log(serviceList);
   useEffect(() => {
     async function fetchService() {
-    const res = await fetch('http://localhost:5000/service')
+    const res = await fetch('https://warm-spire-50135.herokuapp.com/service')
     const json = await res.json();
     setServiceList(json);
   }

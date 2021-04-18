@@ -1,16 +1,19 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../Auth/UseAuth";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../App";
 import Sidebar from "./Sidebar";
+
 const ManageService = () => {
-  const auth = useAuth;
+  const [loggedInUser, SetLoggedInUser] = useContext(AuthContext)
+  
   const [serviceList, setServiceList] = useState([]);
 
   useEffect(() => {
-    const url = "http://localhost:5000/service";
+    const url = "https://warm-spire-50135.herokuapp.com/service";
     async function fetchData() {
       const response = await fetch(url);
       const json = await response.json();
@@ -23,7 +26,7 @@ const ManageService = () => {
 
   const handleDeleteService = (id, event) => {
     // console.log('clicked, ', event.target.parentElement.parentElement);
-    fetch(`http://localhost:5000/delete-service/${id}`, {
+    fetch(`https://warm-spire-50135.herokuapp.com/delete-service/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -71,17 +74,23 @@ const ManageService = () => {
         </div>
         <div className="col-md-9">
           <div className="row">
-            <div className="col-md-12">
+          <div className="col-md-12">
               <div className="d-flex justify-content-between py-2">
                 <h3 className="text-primary">Manage Service</h3>
-                {auth.user ? (
-                  <h3 className="text-primary">{auth.user.displayName}</h3>
+
+                {loggedInUser.email ? (
+                  <>
+                  <h3 className="text-primary">{loggedInUser.displayName}</h3>
+                  <button className="btn btn-danger btn-sm" onClick={() => loggedInUser.signout()}>Sign Out</button>
+                  </>
                 ) : (
                   <h3 className="text-primary">User Name</h3>
                 )}
               </div>
             </div>
             <div className="col-md-12">
+            <div className="card">
+              <div className="card-body shadow">
               <table className="table">
                 <thead>
                   <tr>
@@ -93,6 +102,8 @@ const ManageService = () => {
                 </thead>
                 <tbody>{serviceRow}</tbody>
               </table>
+              </div>
+            </div>
             </div>
           </div>
         </div>

@@ -1,18 +1,19 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from 'react-router-dom';
-import { useAuth } from "../Auth/UseAuth";
+import { AuthContext } from "../../App";
 import Sidebar from "./Sidebar";
 
 const Checkout = () => {
+  const [loggedInUser, SetLoggedInUser] = useContext(AuthContext)
     const [order, setOrder] = useState({})
     const {id} = useParams();
-    const auth = useAuth();
+    
     const history = useHistory();
 
     useEffect(() => {
-        const url = `http://localhost:5000/order/${id}`;
+        const url = `https://warm-spire-50135.herokuapp.com/order/${id}`;
         fetch(url)
         .then(res => res.json())
         .then(data => setOrder(data));
@@ -20,14 +21,14 @@ const Checkout = () => {
 
     const handleCheckOut = (order) => {
         // console.log(order);
-        fetch('http://localhost:5000/add-orders',{
+        fetch('https://warm-spire-50135.herokuapp.com/add-orders',{
             method: 'POST',
             headers: {'Content-Type' : 'application/json'},
             body: JSON.stringify({
                 serviceName: `${order.serviceName}`,
                 price: `${order.price}`,
                 quantity: 1,
-                userEmail: `${auth.user.email}`,
+                userEmail: `${loggedInUser.email}`,
                 orderTime:  new Date().toLocaleString()
             })
         }, [order])
@@ -53,8 +54,8 @@ const Checkout = () => {
 
             <h3 className="ml-auto">
               {
-                auth.user ? (
-                <b>{auth.user.displayName}</b>
+                loggedInUser.email ? (
+                <b>{loggedInUser.displayName}</b>
                 ) : (<b>dummy user</b>)
               }
             </h3>

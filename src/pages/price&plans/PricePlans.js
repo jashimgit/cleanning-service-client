@@ -15,7 +15,7 @@ const PricePlans = () => {
 
 useEffect(() => {
     async function fetchService() {
-    const res = await fetch('http://localhost:5000/service')
+    const res = await fetch('https://warm-spire-50135.herokuapp.com/service')
     const json = await res.json();
     setServiceList(json);
   }

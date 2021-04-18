@@ -6,7 +6,7 @@ const Review = () => {
     // console.log(reviews);
   useEffect(() => {
     async function fetchReview() {
-        const response = await fetch('http://localhost:5000/reviews')
+        const response = await fetch('https://warm-spire-50135.herokuapp.com/reviews')
         const data = await response.json();
         setReviews(data);
     }

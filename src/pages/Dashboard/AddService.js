@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { AuthContext } from "../../App";
 import Sidebar from "./Sidebar";
 
 const AddService = () => {
+  const [loggedInUser, setLoggedInUser] = useContext(AuthContext);
   const [imageUrl, setImageUrl] = useState();
   const {
     register,
@@ -23,7 +26,7 @@ const AddService = () => {
     };
     console.log(serviceInfo);
 
-    fetch("http://localhost:5000/addService", {
+    fetch("https://warm-spire-50135.herokuapp.com/addService", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(serviceInfo),
@@ -52,9 +55,25 @@ const AddService = () => {
           <Sidebar></Sidebar>
         </div>
         <div className="col-md-8">
-          <h2>add Service</h2>
+          <div className="row">
+          <div className="col-md-12">
+              <div className="d-flex justify-content-between py-2">
+                <h3 className="text-primary">Add Service</h3>
+                {loggedInUser.email ? (
+                  <>
+                  <h3 className="text-primary">{loggedInUser.displayName}</h3>
+                  <button className="btn btn-danger btn-sm" onClick={() => loggedInUser.signout()}>Sign Out</button>
+                  </>
+                ) : (
+                  <h3 className="text-primary">User Name</h3>
+                )}
+              </div>
+            </div>
+          </div>
           <div className="row">
             <div className="col-md-7">
+            <div className="card">
+              <div className="card-body shadow">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group">
                   <label>Service Name</label>
@@ -109,6 +128,8 @@ const AddService = () => {
                   Send
                 </button>
               </form>
+              </div>
+            </div>
             </div>
           </div>
         </div>

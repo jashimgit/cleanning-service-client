@@ -1,14 +1,16 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../Auth/UseAuth";
+import { AuthContext } from "../../App";
 import Sidebar from "./Sidebar";
 
+
 const AddReview = () => {
+  const [loggedInUser, SetLoggedInUser] = useContext(AuthContext)
   const [review, setReview] = useState('');
-  const auth = useAuth();
-  const userEmail = auth.user.email;
+
+  const userEmail = loggedInUser.email;
 
   const {
     register,
@@ -18,7 +20,7 @@ const AddReview = () => {
 
   const onSubmit = (data) => {
         
-    fetch("http://localhost:5000/add-review", {
+    fetch("https://warm-spire-50135.herokuapp.com/add-review", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -40,18 +42,32 @@ const AddReview = () => {
           <Sidebar></Sidebar>
         </div>
         <div className="col-md-8">
-          <h2 className="my-5">Review</h2>
+        <div className="row">
+        <div className="col-md-12">
+              <div className="d-flex justify-content-between py-2">
+                <h3 className="text-primary">ReView Page</h3>
+
+                {loggedInUser.email ? (
+                  <>
+                  <h3 className="text-primary">{loggedInUser.displayName}</h3>
+                  <button className="btn btn-danger btn-sm" onClick={() => loggedInUser.signout()}>Sign Out</button>
+                  </>
+                ) : (
+                  <h3 className="text-primary">Login</h3>
+                )}
+              </div>
+            </div>
+        </div>
           <div className="row">
             <div className="col-md-7">
             <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
-              <label>Review</label>
-              <input
-                type="text"
+              <label>Write a Review</label>
+            
+              <textarea type="text"
                 className="form-control"
                 placeholder="Enter your review"
-                {...register("review", { required: true })}
-              />
+                {...register("review", { required: true })}></textarea>
               {errors.name && (
                 <span className="text-danger">This field is required</span>
               )}
