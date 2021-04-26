@@ -18,6 +18,7 @@ const OrderList = () => {
   const handleChange = (_id) => {
     const status = event.target.value;
     const id = _id;
+    console.log(id, status);
     fetch('https://warm-spire-50135.herokuapp.com/change-status', {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -35,6 +36,7 @@ const OrderList = () => {
   }, []);
 
   const orderRow = orderList.map((order) => {
+    console.log(order);
     const {_id, serviceName, price, userEmail, orderTime, status } = order;
 
     return (
