@@ -1,19 +1,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { AuthContext } from "../../App";
+import { useAuth } from "../Auth/UseAuth";
 import Sidebar from "./Sidebar";
 
 const Checkout = () => {
-  const [loggedInUser, SetLoggedInUser] = useContext(AuthContext);
+  // const [loggedInUser, SetLoggedInUser] = useContext(AuthContext);
+  const auth = useAuth();
   const [order, setOrder] = useState([]);
   const { id } = useParams();
 
   const history = useHistory();
 
   useEffect(() => {
-    const url = `https://warm-spire-50135.herokuapp.com/order/${id}`;
+    const url = `https://clean-server.herokuapp.com/order/${id}`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => setOrder(data));
@@ -30,7 +31,7 @@ const Checkout = () => {
           serviceName: `${order.serviceName}`,
           price: `${order.price}`,
           quantity: 1,
-          userEmail: `${loggedInUser.email}`,
+          userEmail: `${auth.user.email}`,
           orderTime: new Date().toLocaleString(),
         }),
       },
@@ -55,8 +56,8 @@ const Checkout = () => {
             <h3 className="text-primary">Process checkout</h3>
 
             <h3 className="ml-auto">
-              {loggedInUser.email ? (
-                <b>{loggedInUser.displayName}</b>
+              {auth.user.email ? (
+                <b>{auth.user.displayName}</b>
               ) : (
                 <b>dummy user</b>
               )}

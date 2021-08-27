@@ -4,7 +4,13 @@
   align-items: center;
   align-content: center;
   position: absolute;
-  top:50%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.login-avater {
+  height: 100px;
+  width: 100px;
+  margin: 0 auto;
+  margin-top: -50px;
 }

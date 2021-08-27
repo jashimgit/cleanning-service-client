@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-import { createContext, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-
 import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
+import { ProvideAuth } from './pages/Auth/UseAuth';
 import AddAdmin from "./pages/Dashboard/AddAdmin";
 import AddReview from "./pages/Dashboard/AddReview";
 import AddService from "./pages/Dashboard/AddService";
@@ -15,13 +14,12 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import ManageService from "./pages/Dashboard/ManageService";
 import OrderList from "./pages/Dashboard/OrderList";
 import Home from "./pages/Home/Home";
-export const AuthContext = createContext();
-function App() {
 
-  const [loggedInuser, setLoggedInUser] = useState({})
+// export const AuthContext = createContext();
+function App() {
   
   return (
-    <AuthContext.Provider value={[loggedInuser, setLoggedInUser]}>
+    <ProvideAuth>
       <Router>
         <Switch>
           <Route exact path="/">
@@ -53,7 +51,7 @@ function App() {
           </PrivateRoute>
         </Switch>
       </Router>
-    </AuthContext.Provider>
+    </ProvideAuth>
   );
 }
 

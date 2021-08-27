@@ -3,17 +3,18 @@
 /* eslint-disable no-undef */
 import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../App";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../Auth/UseAuth";
 import Sidebar from "./Sidebar";
 
 const ManageService = () => {
-  const [loggedInUser, SetLoggedInUser] = useContext(AuthContext)
-  
+  // const [loggedInUser, SetLoggedInUser] = useContext(AuthContext)
+  const auth = useAuth();
+
   const [serviceList, setServiceList] = useState([]);
 
   useEffect(() => {
-    const url = "https://warm-spire-50135.herokuapp.com/service";
+    const url = "https://clean-server.herokuapp.com/service";
     async function fetchData() {
       const response = await fetch(url);
       const json = await response.json();
@@ -26,7 +27,7 @@ const ManageService = () => {
 
   const handleDeleteService = (id, event) => {
     // console.log('clicked, ', event.target.parentElement.parentElement);
-    fetch(`https://warm-spire-50135.herokuapp.com/delete-service/${id}`, {
+    fetch(`https://clean-server.herokuapp.com/delete-service/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -78,10 +79,10 @@ const ManageService = () => {
               <div className="d-flex justify-content-between py-2">
                 <h3 className="text-primary">Manage Service</h3>
 
-                {loggedInUser.email ? (
+                {auth.user.email ? (
                   <>
-                  <h3 className="text-primary">{loggedInUser.displayName}</h3>
-                  <button className="btn btn-danger btn-sm" onClick={() => loggedInUser.signout()}>Sign Out</button>
+                  <h3 className="text-primary">{auth.user.displayName}</h3>
+                  <button className="btn btn-danger btn-sm" onClick={() => auth.user.signout()}>Sign Out</button>
                   </>
                 ) : (
                   <h3 className="text-primary">User Name</h3>

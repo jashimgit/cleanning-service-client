@@ -1,13 +1,13 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-sequences */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import firebase from "firebase/app";
 import "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
 import { firebaseConfig } from "./FirebaseConfig";
 
-if(!firebase.apps.length) {
+if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
@@ -18,12 +18,12 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 // ... available to any child component that calls useAuth()
 
 export function ProvideAuth({ children }) {
-    const auth = useProvideAuth();
-    return (
+  const auth = useProvideAuth();
+  return (
     <authContext.Provider value={auth}>
       {children}
     </authContext.Provider>
-    );
+  );
 }
 
 // Hook for child components to get the auth object ...
@@ -33,48 +33,82 @@ export const useAuth = () => useContext(authContext);
 
 // Provider hook that creates auth object and handles state
 function useProvideAuth() {
-    const [user, setUser] = useState(null);
+  const [error, setError] = useState('');
+  const [user, setUser] = useState({
+    isSignedIn: false,
+    name: '',
+    email: '',
+    password: '',
+    photoURL: ''
+  });
+  const [loginStatus, setLoginStatus] = useState({
+    status: "idle",
+    error: null
+  });
 
-    const signInWithPopup = () => {
-      return firebase
-      .auth()
-      .signInWithPopup(googleProvider)
-      .then(response => {
-        setUser(response.user);
-        return response.user;
-      })
-    }; 
+  const formatUser = {
+    name: user.displayName,
+    email: user.email,
+    photoURL: user.photoURL
+  }
+  
 
-    const signout = () => {
-        return firebase
-          .auth()
-          .signOut()
-          .then(() => {
-            setUser(false);
-            <Redirect to="/" />
-          });
+  // signinwithpopup 
+
+  const signInWithPopUp = async () => {
+    try {
+      const response = await firebase.auth()
+        .signInWithPopup(googleProvider);
+
+      // console.log(response);
+      const { displayName, photoURL, email } = response.user;
+      const signedInUser = {
+        isSignedIn: true,
+        name: displayName,
+        email: email,
+        photoURL: photoURL
       };
+      setUser(signedInUser);
+      setLoginStatus({ status: "loggedin", error: null });
+      return user;
+    } catch (err) {
+      // handle errors here 
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setError(errorCode, errorMessage);
+    }
+  }
 
-    // Subscribe to user on mount
-    // Because this sets state in the callback it will cause any ...
-    // ... component that utilizes this hook to re-render with the ...
-    // ... latest auth object.
-    useEffect(() => {
-        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                setUser(user);
-            } else {
-                setUser(false);
-            }
-        });
 
-        // Cleanup subscription on unmount
-        return () => unsubscribe();
-    }, []);
+  // signout
+  const signout = () => {
+    return firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        setUser(false);
+      });
+  };
 
-    // Return the user object and auth methods
-    return {
-        user,
-        signInWithPopup,signout
-    };
+  // get user on mount
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(false);
+      }
+    });
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
+  // return the user object and auth methods
+  return {
+    user,
+    signInWithPopUp,
+    signout,
+    formatUser
+  };
 }

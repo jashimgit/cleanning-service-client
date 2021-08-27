@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import React, { useContext } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../../App";
+import { useAuth } from "../Auth/UseAuth";
 import Sidebar from "./Sidebar";
 
+
 const AddAdmin = () => {
-  const [loggedInUser, setLoggedInUser] = useContext(AuthContext);
+  // const [loggedInUser, setLoggedInUser] = useContext(AuthContext);
+  const auth = useAuth()
   const {
     register,
     handleSubmit,
@@ -16,7 +18,7 @@ const AddAdmin = () => {
   const onSubmit = (data, e) => {
     // console.log(data);
     e.preventDefault();
-    fetch("https://warm-spire-50135.herokuapp.com/createAdmin", {
+    fetch("https://clean-server.herokuapp.com/createAdmin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -42,9 +44,9 @@ const AddAdmin = () => {
               <div className="d-flex justify-content-between py-2">
                 <h3 className="text-primary">Make Admin</h3>
 
-                {loggedInUser.email ? (
+                {auth.user.email ? (
                   <>
-                    <h3 className="text-primary">{loggedInUser.displayName}</h3>
+                    <h3 className="text-primary">{auth.user.displayName}</h3>
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => loggedInUser.signout()}

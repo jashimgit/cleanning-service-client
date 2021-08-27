@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../../App";
+import { useAuth } from "../Auth/UseAuth";
 import Sidebar from "./Sidebar";
 
 const AddService = () => {
-  const [loggedInUser, setLoggedInUser] = useContext(AuthContext);
+  // const [loggedInUser, setLoggedInUser] = useContext(AuthContext);
+  const auth = useAuth();
+
   const [imageUrl, setImageUrl] = useState();
   const {
     register,
@@ -26,7 +28,7 @@ const AddService = () => {
     };
     console.log(serviceInfo);
 
-    fetch("https://warm-spire-50135.herokuapp.com/addService", {
+    fetch("https://clean-server.herokuapp.com/addService", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(serviceInfo),
@@ -59,10 +61,10 @@ const AddService = () => {
           <div className="col-md-12">
               <div className="d-flex justify-content-between py-2">
                 <h3 className="text-primary">Add Service</h3>
-                {loggedInUser.email ? (
+                {auth.user.email ? (
                   <>
-                  <h3 className="text-primary">{loggedInUser.displayName}</h3>
-                  <button className="btn btn-danger btn-sm" onClick={() => loggedInUser.signout()}>Sign Out</button>
+                  <h3 className="text-primary">{auth.user.displayName}</h3>
+                  <button className="btn btn-danger btn-sm" onClick={() => auth.user.signout()}>Sign Out</button>
                   </>
                 ) : (
                   <h3 className="text-primary">User Name</h3>

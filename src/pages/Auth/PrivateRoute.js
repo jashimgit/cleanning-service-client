@@ -1,17 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useContext } from 'react';
+import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { AuthContext } from './../../App';
+import { useAuth } from './UseAuth';
 
 
 const PrivateRoute = ({ children, ...rest }) => {
-    const [loggedInUser, setLoggedInUser] = useContext(AuthContext)
+    // const [loggedInUser, setLoggedInUser] = useContext(AuthContext)
+    const auth = useAuth();
     return (
         <Route
             {...rest}
             render={({ location }) =>
-                loggedInUser.email ? (
+                auth.user ? (
                     children
                 ) : (
                     <Redirect
